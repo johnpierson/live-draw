@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net5.0-windows</TargetFramework>
+    <TargetFramework>net6.0-windows</TargetFramework>
     <PublishReadyToRun>false</PublishReadyToRun>
     <OutputType>WinExe</OutputType>
     <RootNamespace>AntFu7.LiveDraw</RootNamespace>
@@ -12,6 +12,7 @@
   <PropertyGroup>
     <ApplicationIcon>Rescoures\Icon.ico</ApplicationIcon>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <ProduceReferenceAssembly>True</ProduceReferenceAssembly>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <PlatformTarget>AnyCPU</PlatformTarget>

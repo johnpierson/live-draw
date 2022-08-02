@@ -15,6 +15,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using Brush = System.Windows.Media.Brush;
+using Color = System.Windows.Media.Color;
 using Point = System.Windows.Point;
 
 namespace AntFu7.LiveDraw
@@ -147,7 +148,8 @@ namespace AntFu7.LiveDraw
         private readonly int[] _brushSizes = { 3, 5, 8, 13, 20 };
         private int _brushIndex = 1;
         private bool _displayOrientation;
-
+        private int _transparencyIndex = 1;
+        private readonly int[] _brushTransparency = { 255, 225, 125, 50 };
         private void SetDetailPanel(bool v)
         {
             if (v)
@@ -182,6 +184,7 @@ namespace AntFu7.LiveDraw
         {
             EnableButton.IsActived = !b;
             Background = Application.Current.Resources[b ? "FakeTransparent" : "TrueTransparent"] as Brush;
+
             _enable = b;
             MainInkCanvas.UseCustomCursor = false;
 
@@ -260,6 +263,23 @@ namespace AntFu7.LiveDraw
         {
             PinButton.IsActived = v;
             Topmost = v;
+        }
+
+        private void SetBrushTransparency(double s, ColorPicker b)
+        {
+            var color = MainInkCanvas.DefaultDrawingAttributes.Color;
+            Color newColor = Color.FromArgb(Convert.ToByte(s),
+                Convert.ToByte(color.R), Convert.ToByte(color.G), Convert.ToByte(color.B));
+            var solidBrush = new SolidColorBrush(newColor);
+            MainInkCanvas.DefaultDrawingAttributes.Color = newColor;
+
+            var ani = new ColorAnimation(solidBrush.Color, Duration3);
+            brushPreview.Background.BeginAnimation(SolidColorBrush.ColorProperty, ani);
+            brushPreview.Background.BeginAnimation(SolidColorBrush.ColorProperty, ani);
+            b.Background.BeginAnimation(SolidColorBrush.ColorProperty, ani);
+            //SetColor(b);
+            //brushPreview?.BeginAnimation(HeightProperty, new DoubleAnimation(s, Duration4));
+            // brushPreview?.BeginAnimation(WidthProperty, new DoubleAnimation(s, Duration4));
         }
         #endregion
 
@@ -516,6 +536,10 @@ namespace AntFu7.LiveDraw
             var border = sender as ColorPicker;
             if (border == null) return;
             SetColor(border);
+            if (!_enable)
+            {
+                SetEnable(true);
+            }
 
             if (EraseByPoint_Flag != (int)erase_mode.NONE)
             {
@@ -555,6 +579,14 @@ namespace AntFu7.LiveDraw
         private void LineButton_Click(object sender, RoutedEventArgs e)
         {
             LineMode(!_lineMode);
+        }
+        private void RightDownClear(object sender, MouseButtonEventArgs e)
+        {
+            AnimatedClear();
+            if (_enable)
+            {
+                SetEnable(false);
+            }
         }
         private void UndoButton_Click(object sender, RoutedEventArgs e)
         {
@@ -673,6 +705,11 @@ namespace AntFu7.LiveDraw
         }
         private void EnableButton_Click(object sender, RoutedEventArgs e)
         {
+            if (Keyboard.IsKeyDown(Key.LeftShift))
+            {
+                LineMode(!_lineMode);
+                return;
+            }
             SetEnable(!_enable);
             if (_eraserMode)
             {
@@ -945,5 +982,32 @@ namespace AntFu7.LiveDraw
             _lastStroke = stroke;
         }
         #endregion
+
+        private void UIElement_OnMouseRightButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            var border = sender as ColorPicker;
+            if (border.IsActived)
+            {
+                _transparencyIndex++;
+                if (_transparencyIndex > _brushTransparency.Count() - 1) _transparencyIndex = 0;
+                SetBrushTransparency(_brushTransparency[_transparencyIndex], border);
+            }
+
+        }
+        private void ColorPickersPanel_OnMouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            if (e.Delta > 0)
+            {
+                _brushIndex++;
+                if (_brushIndex > _brushSizes.Count() - 1) _brushIndex = _brushSizes.Count() - 1;
+                SetBrushSize(_brushSizes[_brushIndex]);
+            }
+            else
+            {
+                _brushIndex--;
+                if (_brushIndex < 0) _brushIndex = 0;
+                SetBrushSize(_brushSizes[_brushIndex]);
+            }
+        }
     }
 }

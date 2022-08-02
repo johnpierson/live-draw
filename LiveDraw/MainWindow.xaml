@@ -128,14 +128,14 @@
                                         </Path>
                                     </Button>
                                 </WrapPanel>
-                                <Border x:Name="PaletteGrip" Width="150" Cursor="SizeAll" Height="25" MouseDown="PaletteGrip_MouseDown"  HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0" Padding="3" >
-                                    <Border CornerRadius="5" Background="#338A8A8A">
-                                        <TextBlock x:Name="InfoBox" Foreground="White" FontSize="10" FontFamily="Consolas" Margin="0" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                <Border x:Name="PaletteGrip" Width="150" Cursor="SizeAll" Height="25" MouseDown="PaletteGrip_MouseDown"  HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0" Padding="3" >
+                                    <Border CornerRadius="5" Background="#338A8A8A" MouseRightButtonDown="RightDownClear">
+                                        <TextBlock x:Name="InfoBox" Foreground="White" FontSize="10" FontFamily="Consolas" Margin="0" HorizontalAlignment="Center" VerticalAlignment="Center" MouseRightButtonDown="RightDownClear"/>
                                     </Border>
                                 </Border>
                             </WrapPanel>
                         </Grid>
-                        <Grid x:Name="ColorPickersPanel" Width="{StaticResource HorizontalModeColorPickersPanel}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="{StaticResource ElementMarginMiddle}">
+                        <Grid x:Name="ColorPickersPanel" Width="{StaticResource HorizontalModeColorPickersPanel}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="{StaticResource ElementMarginMiddle}" >
                             <WrapPanel  Margin="0" HorizontalAlignment="Center">
                                 <WrapPanel.Resources>
                                     <Style TargetType="local:ColorPicker" BasedOn="{StaticResource ColorPicker}">
@@ -144,63 +144,71 @@
                                     <Style TargetType="StackPanel">
                                         <Setter Property="Orientation" Value="Horizontal"></Setter>
                                     </Style>
+                                    <Style TargetType="local:ActivableButton" BasedOn="{StaticResource FunctionalButton}">
+                                        <Setter Property="Padding" Value="0"/>
+                                        <Setter Property="Width" Value="32"/>
+                                        <Setter Property="Height" Value="32"/>
+                                    </Style>
                                 </WrapPanel.Resources>
-                                <local:ColorPicker Background="{StaticResource PaintingColor6}" Click="ColorPickers_Click">
+                                <local:ActivableButton x:Name="BrushSwitchButton" Click="EnableButton_Click" ToolTip="Preview" MouseRightButtonDown="RightDownClear">
+                                    <Border x:Name="brushPreview" Width="5" Height="5" Background="#FFD6D6D6" CornerRadius="10"  HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                </local:ActivableButton>
+                                <local:ColorPicker Background="{StaticResource PaintingColor6}" Click="ColorPickers_Click" MouseWheel="ColorPickersPanel_OnMouseWheel" MouseRightButtonDown="UIElement_OnMouseRightButtonDown" ToolTip="Roll Mouse Wheel to Change Size, Right click to change transparency.">
                                     <local:ColorPicker.RenderTransform>
                                         <RotateTransform CenterX="17.5" CenterY="17.5" Angle="{Binding MinWidth, ElementName=Palette}"/>
                                     </local:ColorPicker.RenderTransform>
                                 </local:ColorPicker>
-                                <local:ColorPicker Background="{StaticResource PaintingColor3}" Click="ColorPickers_Click">
+                                <local:ColorPicker Background="{StaticResource PaintingColor3}" Click="ColorPickers_Click" MouseWheel="ColorPickersPanel_OnMouseWheel" MouseRightButtonDown="UIElement_OnMouseRightButtonDown" ToolTip="Roll Mouse Wheel to Change Size, Right click to change transparency.">
                                     <local:ColorPicker.RenderTransform>
                                         <RotateTransform CenterX="17.5" CenterY="17.5" Angle="{Binding MinWidth, ElementName=Palette}"/>
                                     </local:ColorPicker.RenderTransform>
                                 </local:ColorPicker>
-                                <local:ColorPicker Background="{StaticResource PaintingColor2}" Click="ColorPickers_Click">
+                                <local:ColorPicker Background="{StaticResource PaintingColor2}" Click="ColorPickers_Click" MouseWheel="ColorPickersPanel_OnMouseWheel" MouseRightButtonDown="UIElement_OnMouseRightButtonDown" ToolTip="Roll Mouse Wheel to Change Size, Right click to change transparency.">
                                     <local:ColorPicker.RenderTransform>
                                         <RotateTransform CenterX="17.5" CenterY="17.5" Angle="{Binding MinWidth, ElementName=Palette}"/>
                                     </local:ColorPicker.RenderTransform>
                                 </local:ColorPicker>
-                                <local:ColorPicker Background="{StaticResource PaintingColor1}" Click="ColorPickers_Click">
+                                <local:ColorPicker Background="{StaticResource PaintingColor1}" Click="ColorPickers_Click" MouseWheel="ColorPickersPanel_OnMouseWheel" MouseRightButtonDown="UIElement_OnMouseRightButtonDown" ToolTip="Roll Mouse Wheel to Change Size, Right click to change transparency.">
                                     <local:ColorPicker.RenderTransform>
                                         <RotateTransform CenterX="17.5" CenterY="17.5" Angle="{Binding MinWidth, ElementName=Palette}"/>
                                     </local:ColorPicker.RenderTransform>
                                 </local:ColorPicker>
-                                <local:ColorPicker Background="{StaticResource PaintingColor5}" Click="ColorPickers_Click">
+                                <local:ColorPicker Background="{StaticResource PaintingColor5}" Click="ColorPickers_Click" MouseWheel="ColorPickersPanel_OnMouseWheel" MouseRightButtonDown="UIElement_OnMouseRightButtonDown" ToolTip="Roll Mouse Wheel to Change Size, Right click to change transparency.">
                                     <local:ColorPicker.RenderTransform>
                                         <RotateTransform CenterX="17.5" CenterY="17.5" Angle="{Binding MinWidth, ElementName=Palette}"/>
                                     </local:ColorPicker.RenderTransform>
                                 </local:ColorPicker>
-                                <local:ColorPicker Background="{StaticResource PaintingColor9}" Click="ColorPickers_Click" x:Name="DefaultColorPicker" Size="Small">
+                                <local:ColorPicker Background="{StaticResource PaintingColor9}" Click="ColorPickers_Click" x:Name="DefaultColorPicker" Size="Small" MouseWheel="ColorPickersPanel_OnMouseWheel" MouseRightButtonDown="UIElement_OnMouseRightButtonDown" ToolTip="Roll Mouse Wheel to Change Size, Right click to change transparency.">
                                     <local:ColorPicker.RenderTransform>
                                         <RotateTransform CenterX="17.5" CenterY="17.5" Angle="{Binding MinWidth, ElementName=Palette}"/>
                                     </local:ColorPicker.RenderTransform>
                                 </local:ColorPicker>
-                                <local:ColorPicker Background="{StaticResource PaintingColor10}" Click="ColorPickers_Click">
+                                <local:ColorPicker Background="{StaticResource PaintingColor10}" Click="ColorPickers_Click" MouseWheel="ColorPickersPanel_OnMouseWheel" MouseRightButtonDown="UIElement_OnMouseRightButtonDown" ToolTip="Roll Mouse Wheel to Change Size, Right click to change transparency.">
                                     <local:ColorPicker.RenderTransform>
                                         <RotateTransform CenterX="17.5" CenterY="17.5" Angle="{Binding MinWidth, ElementName=Palette}"/>
                                     </local:ColorPicker.RenderTransform>
                                 </local:ColorPicker>
-                                <local:ColorPicker Background="{StaticResource PaintingColor11}" Click="ColorPickers_Click">
+                                <local:ColorPicker Background="{StaticResource PaintingColor11}" Click="ColorPickers_Click" MouseWheel="ColorPickersPanel_OnMouseWheel" MouseRightButtonDown="UIElement_OnMouseRightButtonDown" ToolTip="Roll Mouse Wheel to Change Size, Right click to change transparency.">
                                     <local:ColorPicker.RenderTransform>
                                         <RotateTransform CenterX="17.5" CenterY="17.5" Angle="{Binding MinWidth, ElementName=Palette}"/>
                                     </local:ColorPicker.RenderTransform>
                                 </local:ColorPicker>
-                                <local:ColorPicker Background="{StaticResource PaintingColor7}" Click="ColorPickers_Click">
+                                <local:ColorPicker Background="{StaticResource PaintingColor7}" Click="ColorPickers_Click" MouseWheel="ColorPickersPanel_OnMouseWheel" MouseRightButtonDown="UIElement_OnMouseRightButtonDown" ToolTip="Roll Mouse Wheel to Change Size, Right click to change transparency.">
                                     <local:ColorPicker.RenderTransform>
                                         <RotateTransform CenterX="17.5" CenterY="17.5" Angle="{Binding MinWidth, ElementName=Palette}"/>
                                     </local:ColorPicker.RenderTransform>
                                 </local:ColorPicker>
-                                <local:ColorPicker Background="{StaticResource PaintingColor8}" Click="ColorPickers_Click">
+                                <local:ColorPicker Background="{StaticResource PaintingColor8}" Click="ColorPickers_Click" MouseWheel="ColorPickersPanel_OnMouseWheel" MouseRightButtonDown="UIElement_OnMouseRightButtonDown" ToolTip="Roll Mouse Wheel to Change Size, Right click to change transparency.">
                                     <local:ColorPicker.RenderTransform>
                                         <RotateTransform CenterX="17.5" CenterY="17.5" Angle="{Binding MinWidth, ElementName=Palette}"/>
                                     </local:ColorPicker.RenderTransform>
                                 </local:ColorPicker>
-                                <local:ColorPicker Background="{StaticResource PaintingColor4}" Click="ColorPickers_Click">
+                                <local:ColorPicker Background="{StaticResource PaintingColor4}" Click="ColorPickers_Click" MouseWheel="ColorPickersPanel_OnMouseWheel" MouseRightButtonDown="UIElement_OnMouseRightButtonDown" ToolTip="Roll Mouse Wheel to Change Size, Right click to change transparency.">
                                     <local:ColorPicker.RenderTransform>
                                         <RotateTransform CenterX="17.5" CenterY="17.5" Angle="{Binding MinWidth, ElementName=Palette}"/>
                                     </local:ColorPicker.RenderTransform>
                                 </local:ColorPicker>
-                                <local:ColorPicker Background="{StaticResource PaintingColor12}" Click="ColorPickers_Click">
+                                <local:ColorPicker Background="{StaticResource PaintingColor12}" Click="ColorPickers_Click" MouseWheel="ColorPickersPanel_OnMouseWheel" MouseRightButtonDown="UIElement_OnMouseRightButtonDown" ToolTip="Roll Mouse Wheel to Change Size, Right click to change transparency.">
                                     <local:ColorPicker.RenderTransform>
                                         <RotateTransform CenterX="17.5" CenterY="17.5" Angle="{Binding MinWidth, ElementName=Palette}"/>
                                     </local:ColorPicker.RenderTransform>
@@ -226,9 +234,6 @@
                                         <Setter Property="Height" Value="32"/>
                                     </Style>
                                 </WrapPanel.Resources>
-                                <local:ActivableButton x:Name="BrushSwitchButton" Click="BrushSwitchButton_Click" ToolTip="Preview">
-                                    <Border x:Name="brushPreview" Width="5" Height="5" Background="#FFD6D6D6" CornerRadius="10"  HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                </local:ActivableButton>
                                 <local:ActivableButton x:Name="LineButton" ToolTip="Line Mode" Click="LineButton_Click">
                                     <Path Data="{DynamicResource IconMinimize}" RenderTransformOrigin="0.5,0.5" Height="3" Stretch="Fill" Width="15">
                                         <Path.RenderTransform>
@@ -294,7 +299,7 @@
                                     </local:ActivableButton.RenderTransform>
                                     <Path Data="{DynamicResource IconCloseEye}"/>
                                 </local:ActivableButton>
-                                <local:ActivableButton x:Name="EnableButton" Click="EnableButton_Click" ToolTip="Release/Recover the control of drawing">
+                                <local:ActivableButton x:Name="EnableButton" Click="EnableButton_Click"  ToolTip="Release/Recover the control of drawing">
                                     <local:ActivableButton.RenderTransform >
                                         <RotateTransform CenterX="16" CenterY="16" Angle="{Binding MinWidth, ElementName=Palette}"/>
                                     </local:ActivableButton.RenderTransform>
